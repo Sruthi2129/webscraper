@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex Assistant</title>
+
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <style>
+    /* === Base Reset === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      width: 100vw;
+      background: linear-gradient(135deg, #01032e, #011428,#00ff99 120%,#001a33);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    /* === Logo === */
+    .logo {
+      position: absolute;
+      top: 25px;
+      left: 30px;
+    }
+
+    .logo img {
+      width: 150px;
+      height: auto;
+    }
+
+    /* === Main Title === */
+    .main-text {
+      font-size: 2em;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* === Chat Box === */
+    .chat-box {
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(6px);
+      border-radius: 40px;
+      width: 750px;
+      max-width: 100%;
+      margin-left:40px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      margin-bottom: 40px;
+      transition: all 0.3s ease;
+    }
+
+    .chat-box:hover {
+      box-shadow: 0 0 15px #00ffff;
+    }
+
+    .chat-box i {
+      font-size: 20px;
+      color: #00b8b8;
+      margin: 0 10px;
+      cursor: pointer;
+    }
+
+    .chat-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: white;
+      font-size: 16px;
+    }
+
+    /* === Suggestions === */
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .suggestion-card {
+      background: rgba(0, 0, 0, 0.45);
+      padding: 15px 20px;
+      border-radius: 12px;
+      width: 260px;
+      height:150px;
+      text-align: left;
+      transition: 0.3s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .suggestion-card:hover {
+      border: 1px solid #00ffff;
+      transform: translateY(-3px);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .suggestion-card i {
+      color: #00ffff;
+      margin-right: 10px;
+    }
+
+    .suggestion-title {
+      font-weight: bold;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .suggestion-text {
+      font-size: 13px;
+      color: #cfcfcf;
+    }
+
+    @media (max-width: 600px) {
+      .main-text {
+        font-size: 1.5em;
+      }
+      .chat-box {
+        width: 90%;
+        height: 55px;
+      }
+      .suggestion-card {
+        width: 90%;
+      }
+    }
+    .agent-tag {
+  color: #00ffff;
+  font-weight: 500;
+  margin-left: 8px;
+  margin-right: 10px;
+  background: rgba(0, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: 0.3s ease;
+}
+
+.agent-tag:hover {
+  background: rgba(0, 255, 255, 0.25);
+  cursor: default;
+}
+
+  </style>
+</head>
+
+<body>
+  <!-- Logo -->
+  <div class="logo">
+    <img src="images/logo.png" alt="Aurigene Logo" />
+  </div>
+
+  <!-- Center content -->
+  <div class="main-content">
+    <h1 class="main-text">Hi Alex, what can I help you with?</h1>
+
+    <!-- Chat Box -->
+    <div class="chat-box">
+  <i class="fa-solid fa-plus"></i>
+  <span class="agent-tag">@LeadGen Agent</span>
+  <input type="text" placeholder="Type your message..." id="userInput" />
+  <i class="fa-solid fa-microphone"></i>
+  <i class="fa-solid fa-paper-plane" id="sendBtn"></i>
+</div>
+
+    <!-- Suggestion Cards -->
+    <div class="suggestions">
+      <div class="suggestion-card">
+        <i class="fa-solid fa-user-tie"></i>
+        <div class="suggestion-title">Lead Research</div>
+        <div class="suggestion-text">Give me the top 50 bio-techs in pre-clinical phase</div>
+      </div>
+
+      <div class="suggestion-card">
+        <i class="fa-solid fa-file-upload"></i>
+        <div class="suggestion-title">Document Editor</div>
+        <div class="suggestion-text">Upload a document and make it better</div>
+      </div>
+
+      <div class="suggestion-card">
+        <i class="fa-solid fa-pen-fancy"></i>
+        <div class="suggestion-title">Formal Writing</div>
+        <div class="suggestion-text">Make this sound more formal and concise</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+
+
+  const sendBtn = document.getElementById("sendBtn");
+  const userInput = document.getElementById("userInput");
+  const plusBtn = document.querySelector(".fa-plus");
+  const micBtn = document.querySelector(".fa-microphone");
+
+  // === 📁 PLUS BUTTON: File Upload ===
+  plusBtn.addEventListener("click", () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".pdf,.doc,.docx,.txt";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        alert(`File "${file.name}" uploaded successfully!`);
+      }
+    };
+    input.click();
+  });
+
+  // === 🎤 MIC BUTTON: Voice Recognition ===
+    micBtn.addEventListener("click", () => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Sorry, your browser doesn't support speech recognition.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.start();
+    micBtn.style.color = "#00ffff";
+    console.log("🎤 Listening...");
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      userInput.value = transcript;
+      micBtn.style.color = "#00b8b8";
+      console.log("✅ Recognized:", transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("❌ Speech recognition error:", event.error);
+      alert("Voice recognition failed or permission denied. Try again.");
+      micBtn.style.color = "#00b8b8";
+    };
+
+    recognition.onend = () => {
+      micBtn.style.color = "#00b8b8";
+      console.log("🎤 Mic stopped");
+    };
+  });
+
+  // === 📤 SEND BUTTON: Send message ===
+  function sendMessage() {
+  const text = userInput.value.trim();
+  if (text !== "") {
+    // Store message in session storage so next page can read it
+    sessionStorage.setItem("userMessage", text);
+
+    // Redirect to another page (for example: response.html)
+    window.location.href = "response.html";
+  }
+}
+
+  sendBtn.addEventListener("click", sendMessage);
+
+  // === ⌨️ ENTER KEY: Trigger send ===
+  userInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // prevent new line
+      sendMessage();
+    }
+  });
+
+  // === 💡 Suggestion Cards Click ===
+  document.querySelectorAll(".suggestion-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      userInput.value = card.querySelector(".suggestion-text").textContent;
+    });
+  });
+
+  </script>
+</body>
+</html>
